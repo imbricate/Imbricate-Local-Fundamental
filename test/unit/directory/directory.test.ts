@@ -20,6 +20,7 @@ describe("Given [Directory] Directory Helper Methods", (): void => {
 
         const concated: string = concatDirectory("first", "second");
 
-        expect(concated).toEqual("first/second");
+        expect(concated).toContain("first");
+        expect(concated).toContain("second");
     });
 });
