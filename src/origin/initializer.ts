@@ -47,9 +47,9 @@ export class ImbricateOriginInitializer {
         return constructor(origin);
     }
 
-    public initializeOrigins = (
+    public initializeOrigins(
         origins: IImbricateConfigurationOrigin[],
-    ): ImbricateOriginManager => {
+    ): ImbricateOriginManager {
 
         const originManager: ImbricateOriginManager = ImbricateOriginManager.fromScratch();
 

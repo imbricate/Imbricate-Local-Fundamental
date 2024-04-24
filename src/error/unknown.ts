@@ -4,13 +4,13 @@
  * @description Unknown
  */
 
-import { CLIError } from "./cli-error";
+import { LocalFundamentalError } from "./local-fundamental-error";
 
-export class CLIUnknownError extends CLIError {
+export class UnknownLocalFundamentalError extends LocalFundamentalError {
 
-    public static withError(error: Error): CLIUnknownError {
+    public static withError(error: Error): UnknownLocalFundamentalError {
 
-        return new CLIUnknownError(error.message);
+        return new UnknownLocalFundamentalError(error.message);
     }
 
     protected constructor(
@@ -18,8 +18,8 @@ export class CLIUnknownError extends CLIError {
         reason?: any,
     ) {
 
-        super(message, "CLIUnknownError", reason);
+        super(message, "UnknownLocalFundamentalError", reason);
 
-        Object.setPrototypeOf(this, CLIUnknownError.prototype);
+        Object.setPrototypeOf(this, UnknownLocalFundamentalError.prototype);
     }
 }
