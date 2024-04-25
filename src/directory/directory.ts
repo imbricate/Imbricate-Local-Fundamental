@@ -19,3 +19,9 @@ export const concatDirectory = (...paths: string[]): string => {
 
     return resolvedPath;
 };
+
+export const getFolderPath = (filePath: string): string => {
+
+    const parsedPath: Path.ParsedPath = Path.parse(filePath);
+    return parsedPath.dir;
+};

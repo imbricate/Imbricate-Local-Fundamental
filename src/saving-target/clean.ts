@@ -4,8 +4,10 @@
  * @description Clean
  */
 
+import { directoryFiles, removeDirectory, removeFile } from "@sudoo/io";
 import { readActiveEditing, writeActiveEditing } from "../active-editing/active-editing";
 import { ActiveEditing } from "../active-editing/definition";
+import { getFolderPath } from "../directory/directory";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 import { hashSavingTarget } from "./hash";
 
@@ -16,11 +18,32 @@ export const cleanupSavingTarget = async (
     const activeEditing: ActiveEditing[] = await readActiveEditing();
 
     const savingTargetHash = hashSavingTarget(savingTarget);
+
+    const targetActiveEditing: ActiveEditing | undefined = activeEditing.find(
+        (item: ActiveEditing) => {
+            return item.hash === savingTargetHash;
+        },
+    );
+
+    if (!targetActiveEditing) {
+        return;
+    }
+
     const updatedActiveEditing: ActiveEditing[] = activeEditing.filter(
         (item: ActiveEditing) => {
-            return item.hash !== savingTargetHash;
+            return item.hash !== targetActiveEditing.hash;
         },
     );
 
     await writeActiveEditing(updatedActiveEditing);
+
+    const filePath: string = targetActiveEditing.path;
+    const outerTempFolderPath: string = getFolderPath(filePath);
+
+    await removeFile(filePath);
+
+    const remainingFiles: string[] = await directoryFiles(outerTempFolderPath);
+    if (remainingFiles.length === 0) {
+        await removeDirectory(outerTempFolderPath);
+    }
 };
