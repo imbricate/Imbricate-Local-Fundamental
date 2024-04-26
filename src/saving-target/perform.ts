@@ -7,7 +7,7 @@
 import { SavingTargetPerformFailedError } from "../error/saving-target/perform-failed";
 import { ImbricateOriginManager } from "../origin/origin-manager";
 import { digestString } from "../util/digest";
-import { cleanupSavingTarget } from "./clean";
+import { cleanupImbricateSavingTarget } from "./clean";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 
 export const performImbricateSavingTarget = async (
@@ -64,5 +64,5 @@ export const performImbricateSavingTarget = async (
         }
     }
 
-    await cleanupSavingTarget(savingTarget);
+    await cleanupImbricateSavingTarget(savingTarget);
 };

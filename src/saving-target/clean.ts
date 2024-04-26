@@ -9,15 +9,15 @@ import { readActiveEditing, writeActiveEditing } from "../active-editing/active-
 import { ActiveEditing } from "../active-editing/definition";
 import { getFolderPath } from "../directory/directory";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
-import { hashSavingTarget } from "./hash";
+import { hashImbricateSavingTarget } from "./hash";
 
-export const cleanupSavingTarget = async (
+export const cleanupImbricateSavingTarget = async (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
 ): Promise<void> => {
 
     const activeEditing: ActiveEditing[] = await readActiveEditing();
 
-    const savingTargetHash = hashSavingTarget(savingTarget);
+    const savingTargetHash: string = hashImbricateSavingTarget(savingTarget);
 
     const targetActiveEditing: ActiveEditing | undefined = activeEditing.find(
         (item: ActiveEditing) => {

@@ -6,7 +6,7 @@
 
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 
-export const hashSavingTarget = (
+export const hashImbricateSavingTarget = (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
 ): string => {
 

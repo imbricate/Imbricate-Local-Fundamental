@@ -10,7 +10,7 @@ import { readActiveEditing, writeActiveEditing } from "../active-editing/active-
 import { ActiveEditing } from "../active-editing/definition";
 import { resolveImbricateTempDirectory } from "../directory/directory-resolve";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
-import { hashSavingTarget } from "./hash";
+import { hashImbricateSavingTarget } from "./hash";
 
 export const establishImbricateSavingTarget = async (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
@@ -18,9 +18,9 @@ export const establishImbricateSavingTarget = async (
     content: string,
 ): Promise<ActiveEditing> => {
 
-    const activeEditing = await readActiveEditing();
+    const activeEditing: ActiveEditing[] = await readActiveEditing();
 
-    const savingTargetHash = hashSavingTarget(savingTarget);
+    const savingTargetHash: string = hashImbricateSavingTarget(savingTarget);
 
     for (const editing of activeEditing) {
         if (editing.hash === savingTargetHash) {
