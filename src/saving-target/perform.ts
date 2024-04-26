@@ -6,6 +6,7 @@
 
 import { SavingTargetPerformFailedError } from "../error/saving-target/perform-failed";
 import { ImbricateOriginManager } from "../origin/origin-manager";
+import { digestString } from "../util/digest";
 import { cleanupSavingTarget } from "./clean";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 
@@ -14,6 +15,9 @@ export const performImbricateSavingTarget = async (
     content: string,
     originManager: ImbricateOriginManager,
 ): Promise<void> => {
+
+    const updatedDigest: string = digestString(content);
+    const updateTime: Date = new Date();
 
     switch (savingTarget.type) {
         case SAVING_TARGET_TYPE.PAGE: {
@@ -37,7 +41,8 @@ export const performImbricateSavingTarget = async (
             }
 
             await page.writeContent(content);
-            await page.refreshUpdatedAt(new Date());
+            await page.refreshUpdateMetadata(updateTime, updatedDigest);
+
             break;
         }
         case SAVING_TARGET_TYPE.SCRIPT: {
@@ -53,7 +58,8 @@ export const performImbricateSavingTarget = async (
             }
 
             await script.writeScript(content);
-            await script.refreshUpdatedAt(new Date());
+            await script.refreshUpdateMetadata(updateTime, updatedDigest);
+
             break;
         }
     }
