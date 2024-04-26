@@ -1,7 +1,7 @@
 {
   "name": "@imbricate/local-fundamental",
   "packageManager": "yarn@4.1.1",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "description": "The Local File System Fundamental for Imbricate",
   "scripts": {
     "test": "jest",

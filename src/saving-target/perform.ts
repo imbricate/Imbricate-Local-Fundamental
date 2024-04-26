@@ -10,11 +10,23 @@ import { digestString } from "../util/digest";
 import { cleanupImbricateSavingTarget } from "./clean";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 
+/**
+ * Perform imbricate saving target
+ * - If cancelIfNoChange is true, will cancel the saving if the content is not changed
+ * - If cancelIfNoChange is false, will always save the content
+ * @param savingTarget saving target
+ * @param content content
+ * @param originManager origin manager
+ * @param cancelIfNoChange cancel if no change
+ * 
+ * @returns whether the saving performed or canceled, true if performed, false if canceled
+ */
 export const performImbricateSavingTarget = async (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
     content: string,
     originManager: ImbricateOriginManager,
-): Promise<void> => {
+    cancelIfNoChange: boolean = true,
+): Promise<boolean> => {
 
     const updatedDigest: string = digestString(content);
     const updateTime: Date = new Date();
@@ -40,6 +52,18 @@ export const performImbricateSavingTarget = async (
                 throw SavingTargetPerformFailedError.pageNotFound(fixedTarget.payload.identifier);
             }
 
+            if (cancelIfNoChange) {
+
+                const currentContent: string = await page.readContent();
+                const currentDigest: string = digestString(currentContent);
+
+                if (currentDigest === updatedDigest) {
+
+                    await cleanupImbricateSavingTarget(savingTarget);
+                    return false;
+                }
+            }
+
             await page.writeContent(content);
             await page.refreshUpdateMetadata(updateTime, updatedDigest);
 
@@ -57,12 +81,25 @@ export const performImbricateSavingTarget = async (
                 throw SavingTargetPerformFailedError.scriptNotFound(savingTarget.payload.identifier);
             }
 
-            await script.writeScript(content);
-            await script.refreshUpdateMetadata(updateTime, updatedDigest);
+            const currentContent: string = await script.readScript();
+            const currentDigest: string = digestString(currentContent);
+
+            if (cancelIfNoChange) {
+
+                if (currentDigest === updatedDigest) {
+
+                    await cleanupImbricateSavingTarget(savingTarget);
+                    return false;
+                }
+
+                await script.writeScript(content);
+                await script.refreshUpdateMetadata(updateTime, updatedDigest);
+            }
 
             break;
         }
     }
 
     await cleanupImbricateSavingTarget(savingTarget);
+    return true;
 };
