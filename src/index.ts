@@ -28,4 +28,5 @@ export * from "./saving-target/establish";
 export * from "./saving-target/hash";
 export * from "./saving-target/perform";
 export * from "./util/digest";
+export * from "./util/validate-filename";
 
