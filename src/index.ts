@@ -10,6 +10,7 @@ export * from "./active-editing/map-identifier";
 export * from "./active-editing/reference";
 export * from "./configuration/definition";
 export * from "./configuration/editor/presets";
+export * from "./configuration/io";
 export * from "./configuration/parse";
 export * from "./configuration/raw-definition";
 export * from "./directory/directory";

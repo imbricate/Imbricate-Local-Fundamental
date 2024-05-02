@@ -4,9 +4,8 @@
  * @description Raw Definition
  */
 
-import { ListableValue } from "@imbricate/core";
-import { ConfigurationEditorPreset, configurationEditorVscodeNewWindowPreset } from "./editor/presets";
 import { IImbricateConfigurationProfile } from "./definition";
+import { ConfigurationEditorPreset, configurationEditorVscodeNewWindowPreset } from "./editor/presets";
 
 export interface IImbricateConfigurationOrigin {
 
@@ -18,7 +17,7 @@ export interface IImbricateConfigurationOrigin {
 
 export interface IRawImbricateConfiguration {
 
-    readonly origins: ListableValue<IImbricateConfigurationOrigin>;
+    readonly origins: Array<IImbricateConfigurationOrigin>;
     readonly activeOrigin: string | null;
 
     readonly profiles: Record<string, IImbricateConfigurationProfile>;
