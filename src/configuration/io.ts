@@ -4,33 +4,13 @@
  * @description IO
  */
 
-import { attemptMarkDir, pathExists, readTextFile, writeTextFile } from "@sudoo/io";
-import * as Path from "path";
-import { resolveDirectory } from "../directory/directory";
+import { writeTextFile } from "@sudoo/io";
 import { concatConfigurationPath } from "../directory/directory-concat";
 import { formatJSON } from "../format/format-json";
+import { createOrGetFile } from "./common";
 import { IImbricateConfiguration } from "./definition";
 import { parseRawImbricateConfiguration } from "./parse";
 import { IRawImbricateConfiguration, getDefaultRawImbricateConfiguration } from "./raw-definition";
-
-const createOrGetFile = async (
-    path: string,
-    defaultValue: string,
-): Promise<string> => {
-
-    const fileExist: boolean = await pathExists(path);
-
-    if (fileExist) {
-        return await readTextFile(path);
-    }
-
-    const folderPath = Path.dirname(path);
-
-    await attemptMarkDir(folderPath);
-    await writeTextFile(path, defaultValue);
-
-    return defaultValue;
-};
 
 export const persistImbricateConfiguration = async (
     configurationPath: string,
@@ -38,9 +18,8 @@ export const persistImbricateConfiguration = async (
 ): Promise<void> => {
 
     const configurationText: string = formatJSON(configuration);
-    const configurationFilePath: string = resolveDirectory(
+    const configurationFilePath: string = concatConfigurationPath(
         configurationPath,
-        "imbricate.config.json",
     );
 
     await writeTextFile(configurationFilePath, configurationText);

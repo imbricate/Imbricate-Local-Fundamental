@@ -13,3 +13,11 @@ export const concatConfigurationPath = (configurationPath: string): string => {
         "imbricate.config.json",
     );
 };
+
+export const concatSearchPreferencePath = (configurationPath: string): string => {
+
+    return concatDirectory(
+        configurationPath,
+        "search-preference.json",
+    );
+};
