@@ -38,7 +38,8 @@ export class ImbricateOriginInitializer {
         origin: IImbricateConfigurationOrigin,
     ): IImbricateOrigin {
 
-        const constructor: ImbricateOriginConstructFunction | undefined = this._originConstructors.get(type);
+        const constructor: ImbricateOriginConstructFunction | undefined =
+            this._originConstructors.get(type);
 
         if (!constructor) {
             throw OriginUnknownOriginError.withOriginName(type);
@@ -56,7 +57,7 @@ export class ImbricateOriginInitializer {
         for (const origin of origins) {
 
             const result: IImbricateOrigin = this.reconstructOrigin(
-                origin.type,
+                origin.originType,
                 origin,
             );
             originManager.putOrigin(origin.originName, result);

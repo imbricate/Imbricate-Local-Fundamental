@@ -11,7 +11,9 @@ export interface IImbricateConfigurationOrigin {
 
     readonly originName: string;
 
-    readonly type: string;
+    readonly originType: string;
+    readonly uniqueIdentifier: string;
+
     readonly payloads: Record<string, any>;
 }
 
