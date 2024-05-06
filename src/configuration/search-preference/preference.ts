@@ -47,6 +47,7 @@ export const includeCollectionInSearch = async (
     configurationPath: string,
     originName: string,
     collectionName: string,
+    collectionUniqueIdentifier: string,
 ): Promise<void> => {
 
     const preferences: ImbricateSearchPreference = await readOrCreateSearchPreferenceConfiguration(
@@ -58,6 +59,7 @@ export const includeCollectionInSearch = async (
         {
             originName,
             collectionName,
+            collectionUniqueIdentifier,
         },
     ];
 
@@ -70,6 +72,7 @@ export const excludeCollectionInSearch = async (
     configurationPath: string,
     originName: string,
     collectionName: string,
+    collectionUniqueIdentifier: string,
 ): Promise<void> => {
 
     const preferences: ImbricateSearchPreference = await readOrCreateSearchPreferenceConfiguration(
@@ -78,7 +81,7 @@ export const excludeCollectionInSearch = async (
 
     const newPreferences: IncludedSearchPreference[] = preferences.included.filter((preference: IncludedSearchPreference) => {
         return preference.originName !== originName
-            || preference.collectionName !== collectionName;
+            || preference.collectionUniqueIdentifier !== collectionUniqueIdentifier;
     });
 
     await persistSearchPreferenceConfiguration(configurationPath, {

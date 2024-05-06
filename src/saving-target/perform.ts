@@ -44,7 +44,10 @@ export const performImbricateSavingTarget = async (
 
             const collection = await origin.getCollection(fixedTarget.payload.collection);
             if (!collection) {
-                throw SavingTargetPerformFailedError.collectionNotFound(fixedTarget.payload.collection);
+                throw SavingTargetPerformFailedError.collectionNotFound(
+                    fixedTarget.payload.collection,
+                    fixedTarget.payload.collection,
+                );
             }
 
             const page = await collection.getPage(fixedTarget.payload.identifier);

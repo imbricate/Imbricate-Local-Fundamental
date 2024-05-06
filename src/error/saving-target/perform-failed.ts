@@ -19,10 +19,11 @@ export class SavingTargetPerformFailedError extends SavingTargetError {
 
     public static collectionNotFound(
         collectionName: string,
+        collectionIdentifier: string,
     ): SavingTargetPerformFailedError {
 
         return new SavingTargetPerformFailedError(
-            `Collection: ${collectionName} Not Found`,
+            `Collection: ${collectionIdentifier} Not Found`,
         );
     }
 

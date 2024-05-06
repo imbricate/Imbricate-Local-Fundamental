@@ -13,4 +13,5 @@ export type IncludedSearchPreference = {
 
     readonly originName: string;
     readonly collectionName: string;
+    readonly collectionUniqueIdentifier: string;
 };
