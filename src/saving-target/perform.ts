@@ -46,7 +46,6 @@ export const performImbricateSavingTarget = async (
             if (!collection) {
                 throw SavingTargetPerformFailedError.collectionNotFound(
                     fixedTarget.payload.collection,
-                    fixedTarget.payload.collection,
                 );
             }
 

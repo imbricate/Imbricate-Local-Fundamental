@@ -46,7 +46,6 @@ export const readOrCreateSearchPreferenceConfiguration = async (
 export const includeCollectionInSearch = async (
     configurationPath: string,
     originName: string,
-    collectionName: string,
     collectionUniqueIdentifier: string,
 ): Promise<void> => {
 
@@ -58,7 +57,6 @@ export const includeCollectionInSearch = async (
         ...preferences.included,
         {
             originName,
-            collectionName,
             collectionUniqueIdentifier,
         },
     ];
@@ -71,7 +69,6 @@ export const includeCollectionInSearch = async (
 export const excludeCollectionInSearch = async (
     configurationPath: string,
     originName: string,
-    collectionName: string,
     collectionUniqueIdentifier: string,
 ): Promise<void> => {
 

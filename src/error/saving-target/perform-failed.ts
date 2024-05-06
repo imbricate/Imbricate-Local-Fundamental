@@ -18,7 +18,6 @@ export class SavingTargetPerformFailedError extends SavingTargetError {
     }
 
     public static collectionNotFound(
-        collectionName: string,
         collectionIdentifier: string,
     ): SavingTargetPerformFailedError {
 
