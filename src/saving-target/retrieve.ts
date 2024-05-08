@@ -8,6 +8,14 @@ import { SavingTargetPerformFailedError } from "../error/saving-target/perform-f
 import { ImbricateOriginManager } from "../origin/origin-manager";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 
+/**
+ * Retrieve imbricate saving target
+ *
+ * @param savingTarget
+ * @param originManager 
+ * @param defaultContent the default content if not found
+ * @returns content
+ */
 export const retrieveImbricateSavingTarget = async (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
     originManager: ImbricateOriginManager,

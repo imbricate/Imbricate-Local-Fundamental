@@ -14,10 +14,12 @@ import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
  * Perform imbricate saving target
  * - If cancelIfNoChange is true, will cancel the saving if the content is not changed
  * - If cancelIfNoChange is false, will always save the content
+ * 
  * @param savingTarget saving target
  * @param content content
  * @param originManager origin manager
  * @param cancelIfNoChange cancel if no change
+ * @param cleanup cleanup after saving
  * 
  * @returns whether the saving performed or canceled, true if performed, false if canceled
  */
@@ -26,10 +28,17 @@ export const performImbricateSavingTarget = async (
     content: string,
     originManager: ImbricateOriginManager,
     cancelIfNoChange: boolean = true,
+    cleanup: boolean = true,
 ): Promise<boolean> => {
 
-    const updatedDigest: string = digestString(content);
     const updateTime: Date = new Date();
+    const updatedDigest: string = digestString(content);
+
+    const performCleanup = async () => {
+        if (cleanup) {
+            await cleanupImbricateSavingTarget(savingTarget);
+        }
+    };
 
     switch (savingTarget.type) {
         case SAVING_TARGET_TYPE.PAGE: {
@@ -61,7 +70,7 @@ export const performImbricateSavingTarget = async (
 
                 if (currentDigest === updatedDigest) {
 
-                    await cleanupImbricateSavingTarget(savingTarget);
+                    await performCleanup();
                     return false;
                 }
             }
@@ -90,7 +99,7 @@ export const performImbricateSavingTarget = async (
 
                 if (currentDigest === updatedDigest) {
 
-                    await cleanupImbricateSavingTarget(savingTarget);
+                    await performCleanup();
                     return false;
                 }
 
@@ -102,6 +111,6 @@ export const performImbricateSavingTarget = async (
         }
     }
 
-    await cleanupImbricateSavingTarget(savingTarget);
+    await performCleanup();
     return true;
 };
