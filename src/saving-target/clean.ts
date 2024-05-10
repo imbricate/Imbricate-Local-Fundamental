@@ -11,6 +11,11 @@ import { getFolderPath } from "../directory/directory";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 import { hashImbricateSavingTarget } from "./hash";
 
+/**
+ * Cleanup imbricate saving target
+ * 
+ * @param savingTarget saving target
+ */
 export const cleanupImbricateSavingTarget = async (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
 ): Promise<void> => {
