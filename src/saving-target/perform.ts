@@ -10,12 +10,41 @@ import { digestString } from "../util/digest";
 import { cleanupImbricateSavingTarget } from "./clean";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 
+export type PerformImbricateSavingTargetOptions = {
+
+    readonly force: boolean;
+    readonly cancelIfNoChange: boolean;
+    readonly cleanup: boolean;
+};
+
+const fixPerformImbricateSavingTargetOptions = (
+    options: Partial<PerformImbricateSavingTargetOptions>,
+): PerformImbricateSavingTargetOptions => {
+
+    const defaultOptions: PerformImbricateSavingTargetOptions = {
+
+        force: false,
+        cancelIfNoChange: true,
+        cleanup: true,
+    };
+
+    return {
+        ...defaultOptions,
+        ...options,
+    };
+};
+
 /**
  * Perform imbricate saving target
  * - If cancelIfNoChange is true, will cancel the saving if the content is not changed
  * - If cancelIfNoChange is false, will always save the content
+ * - If force is true, will save the content even if the original digest is not matched
+ * - If force is false, will cancel the saving if the original digest is not matched
+ * - If cleanup is true, will cleanup after saving
+ * - If cleanup is false, will not cleanup after saving
  * 
  * @param savingTarget saving target
+ * @param originalDigest original digest
  * @param content content
  * @param originManager origin manager
  * @param cancelIfNoChange cancel if no change
@@ -25,22 +54,25 @@ import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
  */
 export const performImbricateSavingTarget = async (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
+    originalDigest: string,
     content: string,
     originManager: ImbricateOriginManager,
-    cancelIfNoChange: boolean = true,
-    cleanup: boolean = true,
+    options: Partial<PerformImbricateSavingTargetOptions> = {},
 ): Promise<boolean> => {
+
+    const fixedOptions: PerformImbricateSavingTargetOptions = fixPerformImbricateSavingTargetOptions(options);
 
     const updateTime: Date = new Date();
     const updatedDigest: string = digestString(content);
 
     const performCleanup = async () => {
-        if (cleanup) {
+        if (fixedOptions.cleanup) {
             await cleanupImbricateSavingTarget(savingTarget);
         }
     };
 
     switch (savingTarget.type) {
+
         case SAVING_TARGET_TYPE.PAGE: {
 
             const fixedTarget: SavingTarget<SAVING_TARGET_TYPE.PAGE> =
@@ -63,10 +95,17 @@ export const performImbricateSavingTarget = async (
                 throw SavingTargetPerformFailedError.pageNotFound(fixedTarget.payload.identifier);
             }
 
-            if (cancelIfNoChange) {
+            const currentContent: string = await page.readContent();
+            const currentDigest: string = digestString(currentContent);
 
-                const currentContent: string = await page.readContent();
-                const currentDigest: string = digestString(currentContent);
+            if (currentDigest !== originalDigest) {
+
+                if (!fixedOptions.force) {
+                    return false;
+                }
+            }
+
+            if (fixedOptions.cancelIfNoChange) {
 
                 if (currentDigest === updatedDigest) {
 
@@ -95,17 +134,24 @@ export const performImbricateSavingTarget = async (
             const currentContent: string = await script.readScript();
             const currentDigest: string = digestString(currentContent);
 
-            if (cancelIfNoChange) {
+            if (currentDigest !== originalDigest) {
+
+                if (!fixedOptions.force) {
+                    return false;
+                }
+            }
+
+            if (fixedOptions.cancelIfNoChange) {
 
                 if (currentDigest === updatedDigest) {
 
                     await performCleanup();
                     return false;
                 }
-
-                await script.writeScript(content);
-                await script.refreshUpdateMetadata(updateTime, updatedDigest);
             }
+
+            await script.writeScript(content);
+            await script.refreshUpdateMetadata(updateTime, updatedDigest);
 
             break;
         }

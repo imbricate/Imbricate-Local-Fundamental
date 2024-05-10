@@ -12,5 +12,6 @@ export type ActiveEditing = {
     hash: string;
     path: string;
     startedAt: Date;
+    digest: string;
     target: SavingTarget<any>;
 };

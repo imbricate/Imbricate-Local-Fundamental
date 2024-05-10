@@ -9,6 +9,7 @@ import { UUIDVersion1 } from "@sudoo/uuid";
 import { readActiveEditing, writeActiveEditing } from "../active-editing/active-editing";
 import { ActiveEditing } from "../active-editing/definition";
 import { resolveImbricateTempDirectory } from "../directory/directory-resolve";
+import { digestString } from "../util/digest";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 import { hashImbricateSavingTarget } from "./hash";
 
@@ -40,8 +41,12 @@ export const establishImbricateSavingTarget = async (
 
     const currentTime: Date = new Date();
 
+    const digest: string = digestString(content);
+
     const newActiveEditing: ActiveEditing = {
+
         identifier: editingIdentifier,
+        digest,
         hash: savingTargetHash,
         path: tempFilePath,
         startedAt: currentTime,
