@@ -11,10 +11,11 @@ import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
 /**
  * Retrieve imbricate saving target
  *
- * @param savingTarget
- * @param originManager 
+ * @param savingTarget saving target
+ * @param originManager origin manager
  * @param defaultContent the default content if not found
- * @returns content
+ * 
+ * @returns content of the saving target
  */
 export const retrieveImbricateSavingTarget = async (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
