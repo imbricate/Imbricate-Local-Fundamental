@@ -33,10 +33,10 @@ export class ImbricateOriginInitializer {
         return this;
     }
 
-    public reconstructOrigin(
+    public async reconstructOrigin(
         type: string,
         origin: IImbricateConfigurationOrigin,
-    ): IImbricateOrigin {
+    ): Promise<IImbricateOrigin> {
 
         const constructor: ImbricateOriginConstructFunction | undefined =
             this._originConstructors.get(type);
@@ -45,18 +45,18 @@ export class ImbricateOriginInitializer {
             throw OriginUnknownOriginError.withOriginName(type);
         }
 
-        return constructor(origin);
+        return await Promise.resolve(constructor(origin));
     }
 
-    public initializeOrigins(
+    public async initializeOrigins(
         origins: IImbricateConfigurationOrigin[],
-    ): ImbricateOriginManager {
+    ): Promise<ImbricateOriginManager> {
 
         const originManager: ImbricateOriginManager = ImbricateOriginManager.fromScratch();
 
         for (const origin of origins) {
 
-            const result: IImbricateOrigin = this.reconstructOrigin(
+            const result: IImbricateOrigin = await this.reconstructOrigin(
                 origin.originType,
                 origin,
             );
