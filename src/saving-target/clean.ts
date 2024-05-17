@@ -15,10 +15,12 @@ import { hashImbricateSavingTarget } from "./hash";
  * Cleanup imbricate saving target
  * 
  * @param savingTarget saving target
+ * 
+ * @returns whether the cleanup performed or not
  */
 export const cleanupImbricateSavingTarget = async (
     savingTarget: SavingTarget<SAVING_TARGET_TYPE>,
-): Promise<void> => {
+): Promise<boolean> => {
 
     const activeEditing: ActiveEditing[] = await readActiveEditing();
 
@@ -31,7 +33,7 @@ export const cleanupImbricateSavingTarget = async (
     );
 
     if (!targetActiveEditing) {
-        return;
+        return false;
     }
 
     const updatedActiveEditing: ActiveEditing[] = activeEditing.filter(
@@ -51,4 +53,6 @@ export const cleanupImbricateSavingTarget = async (
     if (remainingFiles.length === 0) {
         await removeDirectory(outerTempFolderPath);
     }
+
+    return true;
 };
