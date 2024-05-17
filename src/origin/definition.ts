@@ -4,7 +4,7 @@
  * @description Definition
  */
 
-import { IImbricateOrigin, PromiseOr } from "@imbricate/core";
+import { IImbricateOrigin } from "@imbricate/core";
 import { IImbricateConfigurationOrigin } from "../configuration/raw-definition";
 
 export type ImbricateOriginManagerOriginResponse = {
@@ -16,4 +16,4 @@ export type ImbricateOriginManagerOriginResponse = {
 
 export type ImbricateOriginConstructFunction = (
     originConfiguration: IImbricateConfigurationOrigin,
-) => PromiseOr<IImbricateOrigin>;
+) => IImbricateOrigin;
