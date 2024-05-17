@@ -6,6 +6,7 @@
 
 import { SavingTargetPerformFailedError } from "../error/saving-target/perform-failed";
 import { ImbricateOriginManager } from "../origin/origin-manager";
+import { debugLog } from "../util/debug";
 import { digestString } from "../util/digest";
 import { cleanupImbricateSavingTarget } from "./clean";
 import { SAVING_TARGET_TYPE, SavingTarget } from "./definition";
@@ -101,6 +102,8 @@ export const performImbricateSavingTarget = async (
             if (currentDigest !== originalDigest) {
 
                 if (!fixedOptions.force) {
+
+                    debugLog(`Digest not matched, current: ${currentDigest}, original: ${originalDigest}`);
                     return false;
                 }
             }
@@ -109,6 +112,7 @@ export const performImbricateSavingTarget = async (
 
                 if (currentDigest === updatedDigest) {
 
+                    debugLog(`Digest not changed, current: ${currentDigest}, updated: ${updatedDigest}`);
                     await performCleanup();
                     return false;
                 }
@@ -137,6 +141,8 @@ export const performImbricateSavingTarget = async (
             if (currentDigest !== originalDigest) {
 
                 if (!fixedOptions.force) {
+
+                    debugLog(`Digest not matched, current: ${currentDigest}, original: ${originalDigest}`);
                     return false;
                 }
             }
@@ -145,6 +151,7 @@ export const performImbricateSavingTarget = async (
 
                 if (currentDigest === updatedDigest) {
 
+                    debugLog(`Digest not changed, current: ${currentDigest}, updated: ${updatedDigest}`);
                     await performCleanup();
                     return false;
                 }
