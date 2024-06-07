@@ -130,7 +130,10 @@ export const performImbricateSavingTarget = async (
                 throw SavingTargetPerformFailedError.originNotFound(savingTarget.payload.origin);
             }
 
-            const script = await origin.getScript(savingTarget.payload.identifier);
+            const script = await origin
+                .getScriptManager()
+                .getScript(savingTarget.payload.identifier);
+
             if (!script) {
                 throw SavingTargetPerformFailedError.scriptNotFound(savingTarget.payload.identifier);
             }
