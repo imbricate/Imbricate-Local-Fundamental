@@ -62,7 +62,10 @@ export const checkSavingTargetConflict = async (
                 throw SavingTargetCheckFailedError.originNotFound(fixedTarget.payload.origin);
             }
 
-            const collection = await origin.getCollection(fixedTarget.payload.collection);
+            const collection = await origin
+                .getCollectionManager()
+                .getCollection(fixedTarget.payload.collection);
+
             if (!collection) {
                 throw SavingTargetCheckFailedError.collectionNotFound(
                     fixedTarget.payload.collection,

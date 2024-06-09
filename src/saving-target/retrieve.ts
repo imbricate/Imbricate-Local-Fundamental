@@ -34,7 +34,10 @@ export const retrieveImbricateSavingTarget = async (
                 throw SavingTargetPerformFailedError.originNotFound(fixedTarget.payload.origin);
             }
 
-            const collection = await origin.getCollection(fixedTarget.payload.collection);
+            const collection = await origin
+                .getCollectionManager()
+                .getCollection(fixedTarget.payload.collection);
+
             if (!collection) {
                 throw SavingTargetPerformFailedError.collectionNotFound(
                     fixedTarget.payload.collection,
