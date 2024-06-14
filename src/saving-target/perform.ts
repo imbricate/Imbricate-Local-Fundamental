@@ -4,6 +4,8 @@
  * @description Perform
  */
 
+import { IMBRICATE_PAGE_CAPABILITY_KEY } from "@imbricate/core";
+import { checkPageCapability } from "../capability/page";
 import { SavingTargetPerformFailedError } from "../error/saving-target/perform-failed";
 import { ImbricateOriginManager } from "../origin/origin-manager";
 import { debugLog } from "../util/debug";
@@ -122,7 +124,13 @@ export const performImbricateSavingTarget = async (
             }
 
             await page.writeContent(content);
-            await page.refreshUpdateMetadata(updateTime, updatedDigest);
+
+            if (checkPageCapability(
+                page,
+                IMBRICATE_PAGE_CAPABILITY_KEY.UPDATE_METADATA,
+            )) {
+                await page.refreshUpdateMetadata(updateTime, updatedDigest);
+            }
 
             break;
         }
