@@ -15,10 +15,12 @@ export class ImbricateOriginManager {
     }
 
     private _origins: Map<string, IImbricateOrigin>;
+    private _dynamicOrigins: Set<string>;
 
     private constructor() {
 
         this._origins = new Map<string, IImbricateOrigin>();
+        this._dynamicOrigins = new Set<string>();
     }
 
     public get origins(): ImbricateOriginManagerOriginResponse[] {
@@ -33,6 +35,10 @@ export class ImbricateOriginManager {
         return response;
     }
 
+    public get dynamicOrigins(): string[] {
+        return Array.from(this._dynamicOrigins);
+    }
+
     public getOrigin(originName: string): IImbricateOrigin | null {
 
         const origin: IImbricateOrigin | undefined = this._origins.get(originName);
@@ -42,9 +48,23 @@ export class ImbricateOriginManager {
         return origin;
     }
 
-    public putOrigin(originName: string, origin: IImbricateOrigin): this {
+    public isDynamicOrigin(originName: string): boolean {
+
+        return this._dynamicOrigins.has(originName);
+    }
+
+    public putOrigin(
+        originName: string,
+        origin: IImbricateOrigin,
+        isDynamic: boolean = false,
+    ): this {
 
         this._origins.set(originName, origin);
+
+        if (isDynamic) {
+            this._dynamicOrigins.add(originName);
+        }
+
         return this;
     }
 }
