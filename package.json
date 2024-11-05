@@ -1,6 +1,6 @@
 {
   "name": "@imbricate/local-fundamental",
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "yarn@4.5.1",
   "version": "1.17.0",
   "description": "The Local File System Fundamental for Imbricate",
   "scripts": {
